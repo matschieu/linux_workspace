@@ -59,7 +59,9 @@ red_prompt() {
 
 docker_clean() {
 	docker system df
-	
+
+	docker stop `docker ps -a -q`
+
 	for i in `docker image list --format "table {{.ID}};{{.Repository}};{{.Tag}};{{.Size}}" | grep "<none>" | cut -d ";" -f 1`; do
 		docker rmi $i
 	done
