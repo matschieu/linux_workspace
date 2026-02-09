@@ -10,7 +10,7 @@ HDD_DIR='/media/mathieu/WD_Elements/Thinkpad T470/unison/'
 HOME_IGNORE_PATH='{.*};{.config/*};{.snap/*};{snap}'
 HOME_IGNORE_NAME='{.*};{*~};{.*~};{target/*};{node_modules/*}'
 HOME_IGNORE_NOT_NAME='{.bash*}'
-HOME_IGNORE_NOT_PATH='{.config};{.config/chromium};.vimrc;.mozilla;.m2'
+HOME_IGNORE_NOT_PATH='{.config};{.icons};{.config/chromium};.vimrc;.mozilla;.m2'
 HOME_SRC='/home/mathieu'
 HOME_DEST=$HDD_DIR'home'
 
