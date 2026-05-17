@@ -1,12 +1,19 @@
 #ALIAS
 alias ls="ls --color=auto"
 alias ll="ls -lih --color=auto"
+alias ls1="ls -hs1 --color=auto"
+
 alias eclipse="/opt/eclipse/eclipse"
 alias lampp="sudo /opt/lampp/lampp"
 alias lampp-gui="sudo /opt/lampp/manager-linux-x64.run"
 alias xnview="/opt/XnView/xnview.sh"
+
 alias aptu="sudo apt update && sudo apt upgrade"
+alias aptur="sudo apt update && sudo apt upgrade && sudo apt autoremove"
+
 alias docker="sudo docker"
+
+alias dkpg_reconfigure="sudo dpkg --configure -a"
 
 alias savedata="~/scripts/savedata.sh"
 alias savephone="~/scripts/savephone.sh"
@@ -37,7 +44,12 @@ clock() {
 }
 
 pdf_light() {
-	gs -sDEVICE=pdfwrite -dPDFSETTINGS=/screen -dNOPAUSE -dBATCH -sOutputFile=$2 $1
+	# Valeurs de -dPDFSETTINGS :
+	# 	/screen : Basse résolution (72 dpi), idéal pour l'envoi par email ou le web.
+	# 	/ebook : Qualité moyenne (150 dpi), bon compromis entre poids et lisibilité.
+	# 	/printer : Haute qualité (300 dpi), pour l'impression.
+	# 	/prepress : Qualité maximale, préserve toutes les couleurs.
+	gs -sDEVICE=pdfwrite -dPDFSETTINGS=/ebook -dNOPAUSE -dBATCH -sOutputFile=$2 $1
 }
 
 flac2mp3() {
