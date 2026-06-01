@@ -5,7 +5,8 @@
 # https://doc.ubuntu-fr.org/unison
 
 UNISON_DIR='/home/mathieu/.unison/'
-HDD_DIR='/media/mathieu/WD_Elements/Thinkpad T470/unison/'
+HDD=`df --output=target /dev/sdb1 | tail -n 1`
+HDD_DIR=$HDD'/Thinkpad T470/unison/'
 
 HOME_IGNORE_PATH='{.*};{.config/*};{.snap/*};{snap}'
 HOME_IGNORE_NAME='{.*};{*~};{.*~};{target/*};{node_modules/*}'
@@ -115,6 +116,12 @@ function save() {
 	DEST=$3
 
 	echo "Saving $SRC into $DEST"
+
+	if [ ! -d "$DEST" ]; then
+		echo "Init the destination $DEST"
+		mkdir -p "$DEST"
+	fi
+	
 	CMD=$(get_unison_cmd $PROFILE $SRC)
 	echo $CMD
 	$CMD
