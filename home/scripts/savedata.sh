@@ -6,28 +6,34 @@
 
 UNISON_DIR='/home/mathieu/.unison/'
 HDD=`df --output=target /dev/sdb1 | tail -n 1`
-HDD_DIR=$HDD'/Thinkpad T470/unison/'
+HDD_DIR=$HDD'/'`hostname`'/unison/'
 
 HOME_IGNORE_PATH='{.*};{.config/*};{.snap/*};{snap}'
 HOME_IGNORE_NAME='{.*};{*~};{.*~};{target/*};{node_modules/*}'
 HOME_IGNORE_NOT_NAME='{.bash*}'
 HOME_IGNORE_NOT_PATH='{.config};{.icons};{.config/chromium};.vimrc;.mozilla;.m2'
-HOME_SRC='/home/mathieu'
-HOME_DEST=$HDD_DIR'home'
+HOME_SRC=`echo ~`
+HOME_DEST=$HDD_DIR`echo $HOME_SRC | cut -d'/' -f2`
 
 DATA_IGNORE_PATH='{$RECYCLE.BIN};System Volume Information'
 DATA_IGNORE_NAME='{.*~}'
 DATA_IGNORE_NOT_NAME=''
 DATA_IGNORE_NOT_PATH=''
-DATA_SRC='/media/mathieu/Data'
-DATA_DEST=$HDD_DIR'data'
+DATA_SRC="/media/$USER/Data"
+DATA_DEST=$HDD_DIR`basename $DATA_SRC`
 
 OPT_IGNORE_PATH=''
 OPT_IGNORE_NAME='{*~};{.*~}'
 OPT_IGNORE_NOT_NAME=''
 OPT_IGNORE_NOT_PATH=''
 OPT_SRC='/opt'
-OPT_DEST=$HDD_DIR'opt'
+OPT_DEST=$HDD_DIR`basename $OPT_SRC`
+
+function debug() {
+	if [ "$DEBUG" = true ]; then
+		echo -e "DEBUG: $1"
+	fi
+}
 
 function get_unison_cmd() {
 	CMD="unison $1"
@@ -106,8 +112,7 @@ function init_profile() {
 	profile_append $PROFILE_FILE "perms = 0"
 	profile_append $PROFILE_FILE "times = true"
 
-	cat $PROFILE_FILE
-	echo
+	debug "Profil $PROFILE_FILE:\n{\n$(cat $PROFILE_FILE)\n}\n"
 }
 
 function save() {
@@ -123,11 +128,9 @@ function save() {
 	fi
 	
 	CMD=$(get_unison_cmd $PROFILE $SRC)
-	echo $CMD
+	debug "Running command '$CMD'"
 	$CMD
 }
-
-# HELP
 
 function usage() {
 	echo "Syntax: "basename $0 [options]
@@ -138,12 +141,13 @@ function usage() {
 	echo -e "\t-d: save $DATA_SRC into $DATA_DEST"
 	echo -e "\t-f: use the force mode to synchronise in one direction from the local computer to the save volume"
 	echo -e "\t-a: use the auto mode to accept all the differences automatically"
+	echo -e "\t-v: verbose mode"
 	echo -e "\t-?: display help"
 }
 
-# MAIN
+# MAIN PROCESS
 
-while getopts "afhod?" option
+while getopts "afhodv?" option
 do
 	case $option in
 		a)
@@ -160,6 +164,9 @@ do
 			;;
 		d)
 			SAVE_DATA=true
+			;;
+		v)
+			DEBUG=true
 			;;
 		?)
 			usage
