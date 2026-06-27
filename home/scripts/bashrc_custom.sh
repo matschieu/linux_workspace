@@ -30,6 +30,9 @@ export PATH="/opt/phpunit/bin:$PATH"
 alias j!=jbang
 export PATH="$HOME/.jbang/bin:$PATH"
 
+# To delete the green background on directories having all write access
+export LS_COLORS=$LS_COLORS:"ow=01;32:tw=01;32:st=01;34:"
+
 #COMMANDS
 xset -b
 #linuxlogo -L 11 -t "T470"
