@@ -4,6 +4,9 @@
 # https://karlesnine.developpez.com/unison/
 # https://doc.ubuntu-fr.org/unison
 
+echo "Starting synchronisation at "$(date +'%Y-%m-%d %H:%M:%S')
+SECONDS=0
+
 UNISON_DIR='/home/mathieu/.unison/'
 HDD=`df --output=target /dev/sdb1 | tail -n 1`
 HDD_DIR=$HDD'/'`hostname`'/unison/'
@@ -130,6 +133,10 @@ function save() {
 	CMD=$(get_unison_cmd $PROFILE $SRC)
 	debug "Running command '$CMD'"
 	$CMD
+	
+	# Let a trace of the date of the synchronisation
+	rm "$DEST"-*-*-* 2>/dev/null
+	touch "$DEST-"`date +'%Y-%m-%d'`
 }
 
 function usage() {
@@ -188,4 +195,6 @@ if [ "$SAVE_DATA" = true ]; then
 	init_profile "data" "$DATA_SRC" "$DATA_DEST" "$DATA_IGNORE_PATH" "$DATA_IGNORE_NAME" "$DATA_IGNORE_NOT_NAME" "$DATA_IGNORE_NOT_PATH"
 	save "data" "$DATA_SRC" "$DATA_DEST"
 fi
+
+echo "Synchronisation finished at $(date +'%Y-%m-%d %H:%M:%S') in $SECONDS seconds"
 
